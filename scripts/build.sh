@@ -9,7 +9,7 @@ cd ../..
 
 if [ $1 == "lua-5.1.5" ]; then
     emcc -Ithirdparty/$1 thirdparty/$1/src/liblua.a \
-        -s WASM=1 -O3 -o dist/glue-$1.js \
+        -s WASM=1 -O3 -o dist/glue/glue-$1.js \
         -s EXTRA_EXPORTED_RUNTIME_METHODS="['cwrap']" \
         -s MODULARIZE=1 \
         -s ALLOW_TABLE_GROWTH \
@@ -33,7 +33,7 @@ if [ $1 == "lua-5.1.5" ]; then
     ]"
 else
     emcc -Ithirdparty/$1 thirdparty/$1/src/liblua.a \
-        -s WASM=1 -O3 -o dist/glue-$1.js \
+        -s WASM=1 -O3 -o dist/glue/glue-$1.js \
         -s EXTRA_EXPORTED_RUNTIME_METHODS="['cwrap']" \
         -s MODULARIZE=1 \
         -s ALLOW_TABLE_GROWTH \
