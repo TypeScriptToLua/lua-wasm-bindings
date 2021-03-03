@@ -1,3 +1,5 @@
+mkdir -p `dirname "$0"`/../dist
+
 cd `dirname "$0"`/../thirdparty/$1
 
 make clean
