@@ -1,4 +1,5 @@
 mkdir -p `dirname "$0"`/../dist
+mkdir -p `dirname "$0"`/../dist/glue
 
 cd `dirname "$0"`/../thirdparty/$1
 
