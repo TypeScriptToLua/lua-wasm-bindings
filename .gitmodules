@@ -1,3 +1,0 @@
-[submodule "thirdparty/lua"]
-	path = thirdparty/lua
-	url = git@github.com:lua/lua.git
