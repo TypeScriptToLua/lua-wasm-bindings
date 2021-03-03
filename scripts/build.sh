@@ -1,4 +1,4 @@
-cd thirdparty/$1
+cd `dirname "$0"`/../thirdparty/$1
 
 make clean
 make generic MYLIBS= MYCFLAGS= CC='emcc -O3 -s WASM=1' AR='emar rcu' RANLIB='emranlib'
