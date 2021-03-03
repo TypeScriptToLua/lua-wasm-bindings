@@ -17,5 +17,7 @@ jobs:
         with:
           node-version: 12.13.1
           registry-url: "https://registry.npmjs.org"
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v7
       - run: npm ci
       - run: npm run complete-build
