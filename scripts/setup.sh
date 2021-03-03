@@ -1,6 +1,3 @@
-echo "The script you are running has basename `basename "$0"`, dirname `dirname "$0"`"
-
-
 `dirname "$0"`/download.sh
 
 `dirname "$0"`/build.sh lua-5.1.5
