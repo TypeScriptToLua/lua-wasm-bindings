@@ -28,7 +28,7 @@ export function createLua(glue: LuaEmscriptenModule, overrides: Partial<Lua>): L
 
 /** @internal */
 export function createLauxLib(glue: LuaEmscriptenModule, lua: Lua, overrides: Partial<LauxLib>): LauxLib {
-    const defaultLauxLib = {
+    const defaultLauxLib: LauxLib = {
         // In C this is just a #define so we have to recreate it ourself
         luaL_dostring: function (L: LuaState, s: string) {
             return this.luaL_loadstring(L, s) || lua.lua_pcall(L, 0, LUA_MULTRET, 0);

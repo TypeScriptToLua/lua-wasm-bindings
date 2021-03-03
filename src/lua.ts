@@ -4,15 +4,15 @@ interface LuaStateUnique {
 export type LuaState = number & LuaStateUnique;
 
 // For usage in call and pcall
-export declare const LUA_MULTRET = -1;
+export const LUA_MULTRET = -1;
 
 // Thread Status Codes
-export declare const LUA_OK = 0;
-export declare const LUA_YIELD = 1;
-export declare const LUA_ERRRUN = 2;
-export declare const LUA_ERRSYNTAX = 3;
-export declare const LUA_ERRMEM = 4;
-export declare const LUA_ERRERR = 5;
+export const LUA_OK = 0;
+export const LUA_YIELD = 1;
+export const LUA_ERRRUN = 2;
+export const LUA_ERRSYNTAX = 3;
+export const LUA_ERRMEM = 4;
+export const LUA_ERRERR = 5;
 
 export interface Lua {
     lua_close(L: LuaState): void;
