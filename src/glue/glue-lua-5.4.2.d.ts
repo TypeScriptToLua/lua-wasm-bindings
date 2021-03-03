@@ -1,3 +1,5 @@
-import type { EmscriptenModuleFactorySync, LuaEmscriptenModule } from "glue";
+import type { EmscriptenModuleFactorySync, LuaEmscriptenModule } from "./glue";
 
-export default {} as EmscriptenModuleFactorySync<LuaEmscriptenModule>;
+declare const glue: EmscriptenModuleFactorySync<LuaEmscriptenModule>;
+
+export default glue;
