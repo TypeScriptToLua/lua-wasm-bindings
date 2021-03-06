@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mkdir -p `dirname "$0"`/../dist
 mkdir -p `dirname "$0"`/../dist/glue
 
