@@ -1,6 +1,22 @@
 import { LuaEmscriptenModule } from "./glue/glue";
 import { LauxLib, Lua, LuaLib, LuaState, LUA_MULTRET } from "./lua";
 
+function safeCwrap(
+    glue: LuaEmscriptenModule,
+    ident: string,
+    returnType: Emscripten.JSType | null,
+    argTypes: Emscripten.JSType[],
+    opts?: Emscripten.CCallOpts
+): (...args: any[]) => any {
+    try {
+        return glue.cwrap(ident, returnType, argTypes, opts);
+    } catch {
+        return _args => {
+            throw `${ident} not supported in this Lua version!`;
+        };
+    }
+}
+
 /** @internal */
 export function createLua(glue: LuaEmscriptenModule, overrides: Partial<Lua>): Lua {
     const defaultLua: Lua = {
@@ -12,7 +28,14 @@ export function createLua(glue: LuaEmscriptenModule, overrides: Partial<Lua>): L
         lua_pcall: function (L: LuaState, nargs: number, nresults: number, msgh: number) {
             return this.lua_pcallk(L, nargs, nresults, msgh, 0, 0);
         },
-        lua_pcallk: glue.cwrap("lua_pcallk", "number", ["number", "number", "number", "number", "number", "number"]),
+        lua_pcallk: safeCwrap(glue, "lua_pcallk", "number", [
+            "number",
+            "number",
+            "number",
+            "number",
+            "number",
+            "number",
+        ]),
         lua_setfield: glue.cwrap("lua_setfield", null, ["number", "number", "string"]),
         lua_tolstring: glue.cwrap("lua_tolstring", "string", ["number", "number", "number"]),
         // In C this is just a #define so we have to recreate it ourself
