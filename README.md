@@ -18,7 +18,7 @@ import { lauxlib, lua, lualib } from "lua-wasm-bindings/dist/lua.54";
 const luaCode = `return "Hello"`;
 consol.log(executeLua(luaCode));
 
-function executeLua (luaCode: string): string {
+function executeLua (luaCode: string): string | Error | never {
     const L = lauxlib.luaL_newstate();
     lualib.luaL_openlibs(L);
 
