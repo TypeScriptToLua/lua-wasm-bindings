@@ -8,7 +8,7 @@ make generic MYLIBS= MYCFLAGS= CC='emcc -O3 -s WASM=1' AR='emar rcu' RANLIB='emr
 
 cd ../..
 
-if [ $1 == "lua-5.1.5" ]; then
+if [[ "$1" == "lua-5.1.5" ]]; then
     emcc -Ithirdparty/$1 thirdparty/$1/src/liblua.a \
         -s WASM=1 -O3 -o dist/glue/glue-$1.js \
         -s EXTRA_EXPORTED_RUNTIME_METHODS="['cwrap']" \
