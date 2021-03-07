@@ -8,9 +8,9 @@ function safeCwrap(
     argTypes: Emscripten.JSType[],
     opts?: Emscripten.CCallOpts
 ): (...args: any[]) => any {
-    try {
+    if ((glue as any)["_" + ident]) {
         return glue.cwrap(ident, returnType, argTypes, opts);
-    } catch {
+    } else {
         return _args => {
             throw `${ident} not supported in this Lua version!`;
         };
