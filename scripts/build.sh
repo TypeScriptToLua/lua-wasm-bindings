@@ -31,7 +31,6 @@ if [[ "$1" == "lua-5.0.3" ]]; then
         -s EXPORTED_FUNCTIONS="[
         '_luaL_openlibs', \
         '_luaL_loadbuffer', \
-        '_luaL_loadstring', \
         '_lua_close', \
         '_lua_gettable', \
         '_lua_insert', \
