@@ -28,17 +28,17 @@ if [[ "$1" == "lua-5.0.3" ]]; then
         '_luaL_loadbuffer', \
         '_luaL_loadstring', \
         '_lua_close', \
-        '_lua_gettable' \
-        '_lua_insert' \
+        '_lua_gettable', \
+        '_lua_insert', \
         '_lua_isstring', \
         '_lua_open', \
         '_lua_pcall', \
-        '_lua_pushstring' \
-        '_lua_pushvalue' \
-        '_lua_remove' \
-        '_lua_replace' \
+        '_lua_pushstring', \
+        '_lua_pushvalue', \
+        '_lua_remove', \
+        '_lua_replace', \
         '_lua_settable', \
-        '_lua_settop' \
+        '_lua_settop', \
         '_lua_tostring', \
         '_lua_type', \
         '_lua_typename', \
@@ -67,17 +67,17 @@ elif [[ "$1" == "lua-5.1.5" ]]; then
         '_luaL_loadstring', \
         '_lua_close', \
         '_lua_getfield', \
-        '_lua_gettable' \
-        '_lua_insert' \
+        '_lua_gettable', \
+        '_lua_insert', \
         '_lua_isstring', \
         '_lua_pcall', \
-        '_lua_pushstring' \
-        '_lua_pushvalue' \
-        '_lua_remove' \
-        '_lua_replace' \
+        '_lua_pushstring', \
+        '_lua_pushvalue', \
+        '_lua_remove', \
+        '_lua_replace', \
         '_lua_setfield', \
         '_lua_settable', \
-        '_lua_settop' \
+        '_lua_settop', \
         '_lua_tolstring', \
         '_lua_type', \
         '_lua_typename', \
@@ -102,22 +102,21 @@ elif [[ "$1" == "lua-5.2.4" ]]; then
         -s EXPORTED_FUNCTIONS="[
         '_luaL_newstate', \
         '_luaL_openlibs', \
-        '_luaL_loadbuffer', \
         '_luaL_loadstring', \
         '_lua_close', \
         '_lua_getfield', \
         '_lua_getglobal', \
-        '_lua_gettable' \
-        '_lua_insert' \
+        '_lua_gettable', \
+        '_lua_insert', \
         '_lua_isstring', \
         '_lua_pcallk', \
-        '_lua_pushstring' \
-        '_lua_pushvalue' \
-        '_lua_remove' \
-        '_lua_replace' \
+        '_lua_pushstring', \
+        '_lua_pushvalue', \
+        '_lua_remove', \
+        '_lua_replace', \
         '_lua_setfield', \
         '_lua_settable', \
-        '_lua_settop' \
+        '_lua_settop', \
         '_lua_tolstring', \
         '_lua_type', \
         '_lua_typename', \
@@ -142,21 +141,20 @@ else
         -s EXPORTED_FUNCTIONS="[
         '_luaL_newstate', \
         '_luaL_openlibs', \
-        '_luaL_loadbuffer', \
         '_luaL_loadstring', \
         '_lua_close', \
         '_lua_copy', \
         '_lua_getfield', \
         '_lua_getglobal', \
-        '_lua_gettable' \
+        '_lua_gettable', \
         '_lua_isstring', \
         '_lua_pcallk', \
-        '_lua_pushstring' \
-        '_lua_pushvalue' \
-        '_lua_rotate' \
+        '_lua_pushstring', \
+        '_lua_pushvalue', \
+        '_lua_rotate', \
         '_lua_setfield', \
         '_lua_settable', \
-        '_lua_settop' \
+        '_lua_settop', \
         '_lua_tolstring', \
         '_lua_type', \
         '_lua_typename', \

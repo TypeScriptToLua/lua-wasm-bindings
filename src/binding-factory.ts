@@ -28,8 +28,8 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
                 return (this as Lua).lua_gettable(L, index);
             },
             lua_setfield: function(L: LuaState, index: number, k: string) {
-                // TODO add lua stack functions to bindings (pusvalue, pop, remove, insert, replace)
-    
+                // The value to set is expected to be on the top of the stack
+                
                 // Push Key
                 (this as Lua).lua_pushstring(L, k);
     
@@ -55,7 +55,6 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
         return {
             // #define lua_getglobal(L,s)  lua_getfield(L, LUA_GLOBALSINDEX, s)
             lua_getglobal: function (L: LuaState, name: string) {
-                // TODO avoid cast
                 return (this as Lua).lua_getfield(L, LUA_GLOBALSINDEX, name);
             },
             // Need to overwrite because in lua 5.1 this is a function and not a #define (5.2 and higher)
@@ -149,11 +148,6 @@ export function createLua(luaGlue: LuaEmscriptenModule, version: string): Lua {
 
 type lauxBindingFactoryFunc = (luaGlue: LuaEmscriptenModule, lua: Lua) => Partial<LauxLib>;
 const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
-    "*": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
-        return {
-            luaL_loadbuffer: luaGlue.cwrap("luaL_loadstring", "number", ["number", "string", "number", "string"]),
-        }
-    },
     "5.0.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
         return {
             luaL_dostring: luaGlue.cwrap("luaL_dostring", "number", ["number", "string"]),
@@ -171,6 +165,18 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
             },
             luaL_loadstring: luaGlue.cwrap("luaL_loadstring", "number", ["number", "string"]),
             luaL_newstate: luaGlue.cwrap("luaL_newstate", "number", []),
+        }
+    },
+    "<=5.1.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+        return {
+            luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]),
+        }
+    },
+    ">=5.1.x": function(_luaGlue: LuaEmscriptenModule, _lua: Lua) {
+        return {
+            luaL_loadbuffer: function(_L: LuaState, _s: string, _slen: number, _name: string) {
+                throw "luaL_loadbuffer not supported in 5.2 and higher use luaL_loadstring instead.";
+            }
         }
     },
 }
