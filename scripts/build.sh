@@ -8,7 +8,7 @@ cd `dirname "$0"`/../thirdparty/$1
 make clean
 
 if [[ "$1" == "lua-5.0.3" ]]; then
-    make MYLIBS= MYCFLAGS= CC='emcc -O3' AR='emar rcu' RANLIB='emranlib'
+    make all MYLIBS= MYCFLAGS= CC='emcc -O3' AR='emar rcu' RANLIB='emranlib'
 else
     make generic MYLIBS= MYCFLAGS= CC='emcc -O3' AR='emar rcu' RANLIB='emranlib'
 fi
