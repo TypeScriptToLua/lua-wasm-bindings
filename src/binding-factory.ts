@@ -51,7 +51,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             lua_tostring: luaGlue.cwrap("lua_tostring", "number", ["number", "number"])
         };
     },
-    "<=5.1.x": function(luaGlue: LuaEmscriptenModule){
+    "<=5.1.0": function(luaGlue: LuaEmscriptenModule){
         return {
             // #define lua_getglobal(L,s)  lua_getfield(L, LUA_GLOBALSINDEX, s)
             lua_getglobal: function (L: LuaState, name: string) {
@@ -65,18 +65,20 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             }
         };
     },
-    ">=5.1.x": function(luaGlue: LuaEmscriptenModule){
+    ">=5.1.0": function(luaGlue: LuaEmscriptenModule){
         return {
+            lua_getfield: luaGlue.cwrap("lua_getfield", "number", ["number", "number", "string"]),
+            lua_setfield: luaGlue.cwrap("lua_setfield", null, ["number", "number", "string"]),
             // TODO 3rd param is a output param (currently ignored)
             lua_tolstring: luaGlue.cwrap("lua_tolstring", "string", ["number", "number", "number"]),
+            // #define
             lua_tostring: function (L: LuaState, index: number) {
                 return (this as Lua).lua_tolstring(L, index, 0);
             },
         };
     },
-    ">=5.2.x": function(luaGlue: LuaEmscriptenModule){
+    ">=5.2.0": function(luaGlue: LuaEmscriptenModule){
         return {
-            lua_getfield: luaGlue.cwrap("lua_getfield", "number", ["number", "number", "string"]),
             lua_getglobal: luaGlue.cwrap("lua_getglobal", "number", ["number", "string"]),
             lua_pcall: function (L: LuaState, nargs: number, nresults: number, msgh: number) {
                 return (this as Lua).lua_pcallk(L, nargs, nresults, msgh, 0, 0);
@@ -88,11 +90,10 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
                 "number",
                 "number",
                 "number",
-            ]),
-            lua_setfield: luaGlue.cwrap("lua_setfield", null, ["number", "number", "string"]),
+            ])
         };
     },
-    "<=5.2.x": function(luaGlue: LuaEmscriptenModule){
+    "<=5.2.0": function(luaGlue: LuaEmscriptenModule){
         return {
             lua_copy: function (_L: LuaState, _fromIndex: number, _toIndex: number) {
                 throw "lua_copy not supported with Lua 5.2 and lower";
@@ -105,7 +106,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             }
         };
     },
-    ">=5.3.x": function(luaGlue: LuaEmscriptenModule){
+    ">=5.3.0": function(luaGlue: LuaEmscriptenModule){
         return {
             lua_copy: luaGlue.cwrap("lua_copy", null, ["number", "number", "number"]),
             // #define
@@ -157,9 +158,14 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
             luaL_newstate: luaGlue.cwrap("lua_open", "number", []),
         }
     },
-    ">=5.0.0": function(luaGlue: LuaEmscriptenModule, lua: Lua) {
+    "<=5.1.0": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
         return {
-            // In C this is just a #define so we have to recreate it ourself
+            luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]),
+        }
+    },
+    ">=5.1.0": function(luaGlue: LuaEmscriptenModule, lua: Lua) {
+        return {
+            // #define
             luaL_dostring: function (L: LuaState, s: string) {
                 return (this as LauxLib).luaL_loadstring(L, s) || lua.lua_pcall(L, 0, LUA_MULTRET, 0);
             },
@@ -167,12 +173,7 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
             luaL_newstate: luaGlue.cwrap("luaL_newstate", "number", []),
         }
     },
-    "<=5.1.0": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
-        return {
-            luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]),
-        }
-    },
-    ">=5.1.0": function(_luaGlue: LuaEmscriptenModule, _lua: Lua) {
+    ">=5.2.0": function(_luaGlue: LuaEmscriptenModule, _lua: Lua) {
         return {
             luaL_loadbuffer: function(_L: LuaState, _s: string, _slen: number, _name: string) {
                 throw "luaL_loadbuffer not supported in 5.2 and higher use luaL_loadstring instead.";
@@ -185,11 +186,8 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
 export function createLauxLib(luaGlue: LuaEmscriptenModule, lua: Lua, version: string): LauxLib {
     const result: Partial<LauxLib> = {};
     for (const [supportedVersion, factoryFunc] of Object.entries(lauxBindings)) {
-        console.log(lauxBindings);
-        console.log(version, supportedVersion, satisfies(version, supportedVersion));
         if (satisfies(version, supportedVersion)) {
             const addedFunctions = factoryFunc(luaGlue, lua);
-            console.log(addedFunctions);
 
             // Validate
             if (Object.keys(addedFunctions).some(k => k in result)) {
@@ -227,7 +225,7 @@ const luaLibBindings: Record<string, luaLibBindingFactoryFunc> = {
             }
         }
     },
-    ">=5.0.0": function(luaGlue: LuaEmscriptenModule) {
+    ">=5.1.0": function(luaGlue: LuaEmscriptenModule) {
         return {
             luaL_openlibs: luaGlue.cwrap("luaL_openlibs", null, ["number"]),
         }
