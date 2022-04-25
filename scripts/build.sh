@@ -6,7 +6,12 @@ mkdir -p `dirname "$0"`/../dist/glue
 cd `dirname "$0"`/../thirdparty/$1
 
 make clean
-make generic MYLIBS= MYCFLAGS= CC='emcc -O3' AR='emar rcu' RANLIB='emranlib'
+
+if [[ "$1" == "lua-5.0.3" ]]; then
+    make MYLIBS= MYCFLAGS= CC='emcc -O3' AR='emar rcu' RANLIB='emranlib'
+else
+    make generic MYLIBS= MYCFLAGS= CC='emcc -O3' AR='emar rcu' RANLIB='emranlib'
+fi
 
 cd ../..
 
