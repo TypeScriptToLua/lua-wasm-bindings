@@ -1,5 +1,3 @@
-import { LuaEmscriptenModule } from "./glue/glue";
-
 interface LuaStateUnique {
     readonly __luaStateBrand: unique symbol;
 }
