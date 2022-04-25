@@ -7,5 +7,5 @@ let luaGlue = glue({
 });
 
 export const lua = createLua(luaGlue, "5.3.x");
-export const lauxlib = createLauxLib(luaGlue, lua, "5.1.x");
-export const lualib = createLuaLib(luaGlue, "5.1.x");
+export const lauxlib = createLauxLib(luaGlue, lua, "5.3.x");
+export const lualib = createLuaLib(luaGlue, "5.3.x");
