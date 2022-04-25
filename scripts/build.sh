@@ -47,7 +47,7 @@ if [[ "$1" == "lua-5.0.3" ]]; then
         '_luaopen_io', \
         '_luaopen_table', \
         '_luaopen_debug', \
-        '_luaopen_base', \
+        '_luaopen_base' \
     ]"
 elif [[ "$1" == "lua-5.1.5" ]]; then
     emcc -Ithirdparty/$1 thirdparty/$1/src/liblua.a \
@@ -86,7 +86,7 @@ elif [[ "$1" == "lua-5.1.5" ]]; then
         '_luaopen_io', \
         '_luaopen_table', \
         '_luaopen_debug', \
-        '_luaopen_base', \
+        '_luaopen_base' \
     ]"
 elif [[ "$1" == "lua-5.2.4" ]]; then
     emcc -Ithirdparty/$1 thirdparty/$1/src/liblua.a \
@@ -126,7 +126,7 @@ elif [[ "$1" == "lua-5.2.4" ]]; then
         '_luaopen_io', \
         '_luaopen_table', \
         '_luaopen_debug', \
-        '_luaopen_base', \
+        '_luaopen_base' \
     ]"
 else
     emcc -Ithirdparty/$1 thirdparty/$1/src/liblua.a \
@@ -165,6 +165,6 @@ else
         '_luaopen_io', \
         '_luaopen_table', \
         '_luaopen_debug', \
-        '_luaopen_base', \
+        '_luaopen_base' \
     ]"
 fi
