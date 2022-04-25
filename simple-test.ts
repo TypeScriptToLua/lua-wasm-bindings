@@ -2,6 +2,8 @@ import * as Lua50 from "./dist/lua.51"
 
 Lua50.lauxlib.luaL_newstate();
 
+console.log(Lua50.lauxlib);
+
 import * as Lua51 from "./dist/lua.52"
 
 Lua51.lauxlib.luaL_newstate();
