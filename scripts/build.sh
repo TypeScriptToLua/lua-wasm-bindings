@@ -29,7 +29,6 @@ if [[ "$1" == "lua-5.0.3" ]]; then
         -s MALLOC=emmalloc \
         -s WASM_ASYNC_COMPILATION=0 \
         -s EXPORTED_FUNCTIONS="[
-        '_luaL_openlibs', \
         '_luaL_loadbuffer', \
         '_lua_close', \
         '_lua_gettable', \
