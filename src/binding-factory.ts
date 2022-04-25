@@ -185,9 +185,12 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
 export function createLauxLib(luaGlue: LuaEmscriptenModule, lua: Lua, version: string): LauxLib {
     const result: Partial<LauxLib> = {};
     for (const [supportedVersion, factoryFunc] of Object.entries(lauxBindings)) {
+        console.log(lauxBindings);
+        console.log(version, supportedVersion, satisfies(version, supportedVersion));
         if (satisfies(version, supportedVersion)) {
             const addedFunctions = factoryFunc(luaGlue, lua);
-            
+            console.log(addedFunctions);
+
             // Validate
             if (Object.keys(addedFunctions).some(k => k in result)) {
                 throw "Error multiple possible bindings for one function, please ensure that only a single possible function exists for a specific version!";
