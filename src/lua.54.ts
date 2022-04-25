@@ -6,6 +6,6 @@ let luaGlue = glue({
     printErr: console.error,
 });
 
-export const lua = createLua(luaGlue, {});
-export const lauxlib = createLauxLib(luaGlue, lua, {});
-export const lualib = createLuaLib(luaGlue, {});
+export const lua = createLua(luaGlue, "5.4.2");
+export const lauxlib = createLauxLib(luaGlue, lua, "5.4.2");
+export const lualib = createLuaLib(luaGlue, "5.4.2");

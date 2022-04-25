@@ -13,7 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup emsdk
-        uses: mymindstorm/setup-emsdk@v7
+        uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: 3.1.9
       - name: Use Node.js 12.13.1
         uses: actions/setup-node@v1
         with:
@@ -21,3 +23,4 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: npm ci
       - run: npm run complete-build
+      - run: npm run test

@@ -16,6 +16,7 @@
         "lint:prettier": "prettier --check . || (echo 'Run `npm run fix:prettier` to fix it.' && exit 1)",
         "lint:eslint": "eslint . --ext .js,.ts",
         "fix:prettier": "prettier --write .",
+        "test": "npx ts-node simple-test.ts",
         "preversion": "npm run complete-build",
         "postversion": "git push && git push --tags"
     },
@@ -29,6 +30,11 @@
         "eslint": "^7.21.0",
         "eslint-plugin-import": "^2.22.1",
         "prettier": "^2.2.1",
+        "ts-node": "^10.7.0",
         "typescript": "^4.2.2"
+    },
+    "dependencies": {
+        "@types/semver": "^7.3.9",
+        "semver": "^7.3.7"
     }
 }
