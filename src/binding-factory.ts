@@ -123,7 +123,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
                 (this as Lua).lua_copy(L, -1, index);
                 (this as Lua).lua_pop(L, 1);
             },
-            lua_rotate: luaGlue.cwrap("lua_replace", null, ["number", "number", "number"]),
+            lua_rotate: luaGlue.cwrap("lua_rotate", null, ["number", "number", "number"]),
         };
     }
 }
