@@ -1,6 +1,6 @@
 import { satisfies } from "semver";
 import { LuaEmscriptenModule } from "./glue/glue";
-import { LauxLib, Lua, LuaLib, LuaState, LUA_GLOBALSINDEX, LUA_MULTRET } from "./lua";
+import { LauxLib, Lua, LuaLib, LuaState, LUA_GLOBALSINDEX_50, LUA_GLOBALSINDEX_51, LUA_MULTRET } from "./lua";
 
 type luaBindingFactoryFunc = (luaGlue: LuaEmscriptenModule) => Partial<Lua>;
 const luaBindings: Record<string, luaBindingFactoryFunc> = {
@@ -23,6 +23,10 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
     },
     "5.0.x": function(luaGlue: LuaEmscriptenModule){
         return {
+            // #define lua_getglobal(L,s)  lua_getfield(L, LUA_GLOBALSINDEX, s)
+            lua_getglobal: function (L: LuaState, name: string) {
+                return (this as Lua).lua_getfield(L, LUA_GLOBALSINDEX_50, name);
+            },
             lua_getfield: function(L: LuaState, index: number, k: string) {
                 (this as Lua).lua_pushstring(L, k);
                 return (this as Lua).lua_gettable(L, index);
@@ -51,12 +55,16 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             lua_tostring: luaGlue.cwrap("lua_tostring", "number", ["number", "number"])
         };
     },
-    "<=5.1.0": function(luaGlue: LuaEmscriptenModule){
+    "5.1.x": function(_: LuaEmscriptenModule){
         return {
             // #define lua_getglobal(L,s)  lua_getfield(L, LUA_GLOBALSINDEX, s)
             lua_getglobal: function (L: LuaState, name: string) {
-                return (this as Lua).lua_getfield(L, LUA_GLOBALSINDEX, name);
-            },
+                return (this as Lua).lua_getfield(L, LUA_GLOBALSINDEX_51, name);
+            }
+        };
+    },
+    "<=5.1.x": function(luaGlue: LuaEmscriptenModule){
+        return {
             // Need to overwrite because in lua 5.1 this is a function and not a #define (5.2 and higher)
             lua_pcall: luaGlue.cwrap("lua_pcall", "number", ["number", "number", "number", "number"]),
             // TODO there might be some way to mimic pcallk behaviour with 5.1 somehow
@@ -93,7 +101,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             ])
         };
     },
-    "<=5.2.0": function(luaGlue: LuaEmscriptenModule){
+    "<=5.2.x": function(luaGlue: LuaEmscriptenModule){
         return {
             lua_copy: function (_L: LuaState, _fromIndex: number, _toIndex: number) {
                 throw "lua_copy not supported with Lua 5.2 and lower";
@@ -158,7 +166,7 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
             luaL_newstate: luaGlue.cwrap("lua_open", "number", []),
         }
     },
-    "<=5.1.0": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+    "<=5.1.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
         return {
             luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]),
         }

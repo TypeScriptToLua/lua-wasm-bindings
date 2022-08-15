@@ -7,7 +7,8 @@ export type LuaState = number & LuaStateUnique;
 export const LUA_MULTRET = -1;
 
 // 5.0 & 5.1
-export const LUA_GLOBALSINDEX = -1002;
+export const LUA_GLOBALSINDEX_50 = -10001;
+export const LUA_GLOBALSINDEX_51 = -10002;
 
 // 5.2^
 export const LUA_RIDX_GLOBALS = 2;
