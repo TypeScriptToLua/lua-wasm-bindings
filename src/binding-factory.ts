@@ -55,7 +55,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             lua_tostring: luaGlue.cwrap("lua_tostring", "number", ["number", "number"])
         };
     },
-    "5.1.x": function(_: LuaEmscriptenModule){
+    "5.1.x": function(_luaGlue: LuaEmscriptenModule){
         return {
             // #define lua_getglobal(L,s)  lua_getfield(L, LUA_GLOBALSINDEX, s)
             lua_getglobal: function (L: LuaState, name: string) {
