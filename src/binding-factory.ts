@@ -52,7 +52,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             lua_tolstring: function(_L: LuaState, _index: number, _size: number) {
                 throw "lua_tolstring is currently not supported in 5.0";
             },
-            lua_tostring: luaGlue.cwrap("lua_tostring", "number", ["number", "number"])
+            lua_tostring: luaGlue.cwrap("lua_tostring", "string", ["number", "number"])
         };
     },
     "5.1.x": function(_luaGlue: LuaEmscriptenModule){
