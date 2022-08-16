@@ -157,9 +157,11 @@ export function createLua(luaGlue: LuaEmscriptenModule, version: string): Lua {
 
 type lauxBindingFactoryFunc = (luaGlue: LuaEmscriptenModule, lua: Lua) => Partial<LauxLib>;
 const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
-    "5.0.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+    "5.0.x": function(luaGlue: LuaEmscriptenModule, lua: Lua) {
         return {
-            luaL_dostring: luaGlue.cwrap("luaL_dostring", "number", ["number", "string"]),
+            luaL_dostring: function(L: LuaState, s: string) {
+                return (this as LauxLib).luaL_loadstring(L, s) || lua.lua_pcall(L, 0, LUA_MULTRET, 0);
+            },
             luaL_loadstring: function(L: LuaState, s: string) {
                 return (this as LauxLib).luaL_loadbuffer(L, s, s.length, s);
             },
