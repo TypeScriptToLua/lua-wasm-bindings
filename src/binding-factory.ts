@@ -1,6 +1,6 @@
 import { satisfies } from "semver";
 import { LuaEmscriptenModule } from "./glue/glue";
-import { LauxLib, Lua, LuaLib, LuaState, LUA_GLOBALSINDEX, LUA_MULTRET } from "./lua";
+import { LauxLib, Lua, LuaLib, LuaState, LUA_GLOBALSINDEX_50, LUA_GLOBALSINDEX_51, LUA_MULTRET } from "./lua";
 
 type luaBindingFactoryFunc = (luaGlue: LuaEmscriptenModule) => Partial<Lua>;
 const luaBindings: Record<string, luaBindingFactoryFunc> = {
@@ -23,9 +23,17 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
     },
     "5.0.x": function(luaGlue: LuaEmscriptenModule){
         return {
+            // #define lua_getglobal(L,s)  lua_getfield(L, LUA_GLOBALSINDEX, s)
+            lua_getglobal: function (L: LuaState, name: string) {
+                return (this as Lua).lua_getfield(L, LUA_GLOBALSINDEX_50, name);
+            },
             lua_getfield: function(L: LuaState, index: number, k: string) {
                 (this as Lua).lua_pushstring(L, k);
-                return (this as Lua).lua_gettable(L, index);
+
+                // Relative offsets must move if the stack pointer moves
+                const isRelativeOffset = index < 0 && index !== LUA_GLOBALSINDEX_50;
+
+                return (this as Lua).lua_gettable(L, isRelativeOffset ? index - 1 : index);
             },
             lua_setfield: function(L: LuaState, index: number, k: string) {
                 // The value to set is expected to be on the top of the stack
@@ -34,29 +42,31 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
                 (this as Lua).lua_pushstring(L, k);
     
                 // Swap key and value because settable expects stack in that order
-                
-                // Copy value to top of stack
-                (this as Lua).lua_pushvalue(L, -2);
+                (this as Lua).lua_insert(L, -2);
     
-                // Remove original value from stack
-                (this as Lua).lua_remove(L, -3);
-    
-                const result = (this as Lua).lua_settable(L, index);
+                // Relative offsets must move if the stack pointer moves
+                const isRelativeOffset = index < 0 && index !== LUA_GLOBALSINDEX_50;
+
+                const result = (this as Lua).lua_settable(L, isRelativeOffset ? index - 1 : index);
     
                 return result;
             },
             lua_tolstring: function(_L: LuaState, _index: number, _size: number) {
                 throw "lua_tolstring is currently not supported in 5.0";
             },
-            lua_tostring: luaGlue.cwrap("lua_tostring", "number", ["number", "number"])
+            lua_tostring: luaGlue.cwrap("lua_tostring", "string", ["number", "number"])
         };
     },
-    "<=5.1.0": function(luaGlue: LuaEmscriptenModule){
+    "5.1.x": function(_luaGlue: LuaEmscriptenModule){
         return {
             // #define lua_getglobal(L,s)  lua_getfield(L, LUA_GLOBALSINDEX, s)
             lua_getglobal: function (L: LuaState, name: string) {
-                return (this as Lua).lua_getfield(L, LUA_GLOBALSINDEX, name);
-            },
+                return (this as Lua).lua_getfield(L, LUA_GLOBALSINDEX_51, name);
+            }
+        };
+    },
+    "<=5.1.x": function(luaGlue: LuaEmscriptenModule){
+        return {
             // Need to overwrite because in lua 5.1 this is a function and not a #define (5.2 and higher)
             lua_pcall: luaGlue.cwrap("lua_pcall", "number", ["number", "number", "number", "number"]),
             // TODO there might be some way to mimic pcallk behaviour with 5.1 somehow
@@ -93,7 +103,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             ])
         };
     },
-    "<=5.2.0": function(luaGlue: LuaEmscriptenModule){
+    "<=5.2.x": function(luaGlue: LuaEmscriptenModule){
         return {
             lua_copy: function (_L: LuaState, _fromIndex: number, _toIndex: number) {
                 throw "lua_copy not supported with Lua 5.2 and lower";
@@ -149,16 +159,18 @@ export function createLua(luaGlue: LuaEmscriptenModule, version: string): Lua {
 
 type lauxBindingFactoryFunc = (luaGlue: LuaEmscriptenModule, lua: Lua) => Partial<LauxLib>;
 const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
-    "5.0.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+    "5.0.x": function(luaGlue: LuaEmscriptenModule, lua: Lua) {
         return {
-            luaL_dostring: luaGlue.cwrap("luaL_dostring", "number", ["number", "string"]),
+            luaL_dostring: function(L: LuaState, s: string) {
+                return (this as LauxLib).luaL_loadstring(L, s) || lua.lua_pcall(L, 0, LUA_MULTRET, 0);
+            },
             luaL_loadstring: function(L: LuaState, s: string) {
                 return (this as LauxLib).luaL_loadbuffer(L, s, s.length, s);
             },
             luaL_newstate: luaGlue.cwrap("lua_open", "number", []),
         }
     },
-    "<=5.1.0": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+    "<=5.1.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
         return {
             luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]),
         }
