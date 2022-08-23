@@ -30,10 +30,10 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
             lua_getfield: function(L: LuaState, index: number, k: string) {
                 (this as Lua).lua_pushstring(L, k);
 
-                // If the index is a relative offset, it needs to be corrected for the grown stack
-                const isOffset = index < 0 && index !== LUA_GLOBALSINDEX_50;
+                // Relative offsets must move if the stack pointer moves
+                const isRelativeOffset = index < 0 && index !== LUA_GLOBALSINDEX_50;
 
-                return (this as Lua).lua_gettable(L, isOffset ? index - 1 : index);
+                return (this as Lua).lua_gettable(L, isRelativeOffset ? index - 1 : index);
             },
             lua_setfield: function(L: LuaState, index: number, k: string) {
                 // The value to set is expected to be on the top of the stack
@@ -44,10 +44,10 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
                 // Swap key and value because settable expects stack in that order
                 (this as Lua).lua_insert(L, -2);
     
-                // If the index is a relative offset, it needs to be corrected for the grown stack
-                const isOffset = index < 0 && index !== LUA_GLOBALSINDEX_50;
+                // Relative offsets must move if the stack pointer moves
+                const isRelativeOffset = index < 0 && index !== LUA_GLOBALSINDEX_50;
 
-                const result = (this as Lua).lua_settable(L, isOffset ? index - 1 : index);
+                const result = (this as Lua).lua_settable(L, isRelativeOffset ? index - 1 : index);
     
                 return result;
             },
