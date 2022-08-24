@@ -1,6 +1,6 @@
 {
     "name": "lua-wasm-bindings",
-    "version": "0.2.3-rc.1",
+    "version": "0.3.0",
     "description": "",
     "files": [
         "dist/**/*.js",
@@ -16,9 +16,7 @@
         "lint:prettier": "prettier --check . || (echo 'Run `npm run fix:prettier` to fix it.' && exit 1)",
         "lint:eslint": "eslint . --ext .js,.ts",
         "fix:prettier": "prettier --write .",
-        "test": "npx ts-node simple-test.ts",
-        "preversion": "npm run complete-build",
-        "postversion": "git push && git push --tags"
+        "test": "npx ts-node simple-test.ts"
     },
     "author": "Lorenz Junglas (Lolleko)",
     "repository": "https://github.com/TypeScriptToLua/lua-wasm-bindings",
