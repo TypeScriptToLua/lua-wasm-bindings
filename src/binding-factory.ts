@@ -167,18 +167,12 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
             luaL_loadstring: function(L: LuaState, s: string) {
                 return (this as LauxLib).luaL_loadbuffer(L, s, s.length, s);
             },
-            luaL_loadbuffer: function(L: LuaState, s: string, slen: number, name: string) {
-                // Terrible, awful hack to prevent the end of the string from being mangled by the C wrapper
-                const pad = "              ";
-                const loadbuffer = luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]);
-                return loadbuffer(L, s + pad, slen + pad.length, name);
-            },
             luaL_newstate: luaGlue.cwrap("lua_open", "number", []),
         }
     },
-    "5.1.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+    "<=5.1.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
         return {
-            luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"])
+            luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]),
         }
     },
     ">=5.1.0": function(luaGlue: LuaEmscriptenModule, lua: Lua) {
