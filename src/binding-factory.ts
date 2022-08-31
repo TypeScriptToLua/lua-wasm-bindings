@@ -168,6 +168,7 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
                 const ptr = luaGlue.allocateUTF8(s) as unknown;
                 return (this as LauxLib).luaL_loadbuffer(L, ptr as string, luaGlue.lengthBytesUTF8(s), s);
             },
+            // Note that s has a "number" type, so we can pass a raw pointer
             luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "number", "number", "string"]),
             luaL_newstate: luaGlue.cwrap("lua_open", "number", []),
         }
