@@ -1,4 +1,6 @@
 export interface LuaEmscriptenModule extends EmscriptenModule {
+    allocateUTF8: typeof allocateUTF8;
+    lengthBytesUTF8: typeof lengthBytesUTF8;
     cwrap: typeof cwrap;
 }
 
