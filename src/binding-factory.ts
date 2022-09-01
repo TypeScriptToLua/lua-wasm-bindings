@@ -165,18 +165,12 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
                 return (this as LauxLib).luaL_loadstring(L, s) || lua.lua_pcall(L, 0, LUA_MULTRET, 0);
             },
             luaL_loadstring: function(L: LuaState, s: string) {
-                const lastStack = luaGlue.stackSave();
-                const cstr = luaGlue.allocateUTF8OnStack(s) as unknown;
-                const result = (this as LauxLib).luaL_loadbuffer(L, cstr as string, luaGlue.lengthBytesUTF8(s), s);
-                luaGlue.stackRestore(lastStack);
-                return result;
+                return (this as LauxLib).luaL_loadbuffer(L, s, luaGlue.lengthBytesUTF8(s), s);
             },
-            // Note that s has a "number" type, so we can pass a raw pointer
-            luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "number", "number", "string"]),
             luaL_newstate: luaGlue.cwrap("lua_open", "number", []),
         }
     },
-    "5.1.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+    "<=5.1.x": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
         return {
             luaL_loadbuffer: luaGlue.cwrap("luaL_loadbuffer", "number", ["number", "string", "number", "string"]),
         }
