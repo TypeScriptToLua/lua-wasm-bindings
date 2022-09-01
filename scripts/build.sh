@@ -20,7 +20,7 @@ cd ../..
 if [[ "$1" == "lua-5.0.3" ]]; then
     emcc -Ithirdparty/$1 thirdparty/$1/lib/liblua.a thirdparty/$1/lib/liblualib.a \
         -s WASM=1 -O3 -o dist/glue/glue-$1.js \
-        -s EXPORTED_RUNTIME_METHODS="['cwrap', 'allocateUTF8', 'lengthBytesUTF8']" \
+        -s EXPORTED_RUNTIME_METHODS="['cwrap', 'stackSave', 'stackRestore', 'lengthBytesUTF8', 'allocateUTF8OnStack']" \
         -s MODULARIZE=1 \
         -s ALLOW_TABLE_GROWTH \
         -s EXPORT_NAME="glue" \

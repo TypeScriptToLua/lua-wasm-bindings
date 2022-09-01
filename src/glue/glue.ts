@@ -1,7 +1,9 @@
 export interface LuaEmscriptenModule extends EmscriptenModule {
-    allocateUTF8: typeof allocateUTF8;
-    lengthBytesUTF8: typeof lengthBytesUTF8;
     cwrap: typeof cwrap;
+    stackSave: typeof stackSave;
+    stackRestore: typeof stackRestore;
+    lengthBytesUTF8: typeof lengthBytesUTF8;
+    allocateUTF8OnStack: typeof allocateUTF8;
 }
 
 export type EmscriptenModuleFactorySync<T extends EmscriptenModule = EmscriptenModule> = (
