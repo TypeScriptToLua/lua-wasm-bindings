@@ -165,7 +165,7 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
                 return (this as LauxLib).luaL_loadstring(L, s) || lua.lua_pcall(L, 0, LUA_MULTRET, 0);
             },
             luaL_loadstring: function(L: LuaState, s: string) {
-                return (this as LauxLib).luaL_loadbuffer(L, s, s.length, s);
+                return (this as LauxLib).luaL_loadbuffer(L, s, luaGlue.lengthBytesUTF8(s), s);
             },
             luaL_newstate: luaGlue.cwrap("lua_open", "number", []),
         }
