@@ -1,6 +1,6 @@
 {
     "name": "lua-wasm-bindings",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "",
     "files": [
         "dist/**/*.js",
@@ -16,6 +16,8 @@
         "lint:prettier": "prettier --check . || (echo 'Run `npm run fix:prettier` to fix it.' && exit 1)",
         "lint:eslint": "eslint . --ext .js,.ts",
         "fix:prettier": "prettier --write .",
+        "preversion": "npm run complete-build",
+        "postversion": "git push && git push --tag",
         "test": "npx ts-node simple-test.ts"
     },
     "author": "Lorenz Junglas (Lolleko)",
