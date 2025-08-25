@@ -30,6 +30,7 @@ if [[ "$1" == "lua-5.0.3" ]]; then
         -s WASM_ASYNC_COMPILATION=0 \
         -s EXPORTED_FUNCTIONS="[
         '_luaL_loadbuffer', \
+        '_lua_call', \
         '_lua_close', \
         '_lua_gettable', \
         '_lua_gettop', \
@@ -69,6 +70,7 @@ elif [[ "$1" == "lua-5.1.5" ]]; then
         '_luaL_openlibs', \
         '_luaL_loadbuffer', \
         '_luaL_loadstring', \
+		'_lua_call', \
         '_lua_close', \
         '_lua_getfield', \
         '_lua_gettable', \
@@ -108,6 +110,7 @@ elif [[ "$1" == "lua-5.2.4" ]]; then
         '_luaL_newstate', \
         '_luaL_openlibs', \
         '_luaL_loadstring', \
+		'_lua_callk', \
         '_lua_close', \
         '_lua_getfield', \
         '_lua_getglobal', \
@@ -148,6 +151,7 @@ else
         '_luaL_newstate', \
         '_luaL_openlibs', \
         '_luaL_loadstring', \
+		'_lua_callk', \
         '_lua_close', \
         '_lua_copy', \
         '_lua_getfield', \
