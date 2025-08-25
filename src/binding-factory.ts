@@ -82,10 +82,6 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
     },
     ">=5.1.0": function(luaGlue: LuaEmscriptenModule){
         return {
-			lua_call: function (L: LuaState, nargs: number, nresults: number) {
-				return (this as Lua).lua_callk(L, nargs, nresults, 0, 0);
-			},
-			lua_callk: luaGlue.cwrap("lua_callk", "number", ["number", "number", "number", "number", "number"]),
             lua_getfield: luaGlue.cwrap("lua_getfield", "number", ["number", "number", "string"]),
             lua_setfield: luaGlue.cwrap("lua_setfield", null, ["number", "number", "string"]),
             // TODO 3rd param is a output param (currently ignored)
@@ -98,6 +94,10 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
     },
     ">=5.2.0": function(luaGlue: LuaEmscriptenModule){
         return {
+			lua_call: function (L: LuaState, nargs: number, nresults: number) {
+				return (this as Lua).lua_callk(L, nargs, nresults, 0, 0);
+			},
+			lua_callk: luaGlue.cwrap("lua_callk", "number", ["number", "number", "number", "number", "number"]),
             lua_getglobal: luaGlue.cwrap("lua_getglobal", "number", ["number", "string"]),
             lua_pcall: function (L: LuaState, nargs: number, nresults: number, msgh: number) {
                 return (this as Lua).lua_pcallk(L, nargs, nresults, msgh, 0, 0);
