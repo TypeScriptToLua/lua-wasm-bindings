@@ -68,6 +68,10 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
     },
     "<=5.1.x": function(luaGlue: LuaEmscriptenModule){
         return {
+			lua_call: luaGlue.cwrap("lua_call", "number", ["number", "number", "number"]),
+			lua_callk: function (_L: LuaState, _nargs: number, _nresults: number, _ctx: number, _k: number) {
+				throw "callk not supported with Lua 5.1 and lower";
+			},
             // Need to overwrite because in lua 5.1 this is a function and not a #define (5.2 and higher)
             lua_pcall: luaGlue.cwrap("lua_pcall", "number", ["number", "number", "number", "number"]),
             // TODO there might be some way to mimic pcallk behaviour with 5.1 somehow
@@ -90,6 +94,10 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
     },
     ">=5.2.0": function(luaGlue: LuaEmscriptenModule){
         return {
+			lua_call: function (L: LuaState, nargs: number, nresults: number) {
+				return (this as Lua).lua_callk(L, nargs, nresults, 0, 0);
+			},
+			lua_callk: luaGlue.cwrap("lua_callk", "number", ["number", "number", "number", "number", "number"]),
             lua_getglobal: luaGlue.cwrap("lua_getglobal", "number", ["number", "string"]),
             lua_pcall: function (L: LuaState, nargs: number, nresults: number, msgh: number) {
                 return (this as Lua).lua_pcallk(L, nargs, nresults, msgh, 0, 0);

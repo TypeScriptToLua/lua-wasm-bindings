@@ -22,6 +22,8 @@ export const LUA_ERRMEM = 4;
 export const LUA_ERRERR = 5;
 
 export interface Lua {
+    lua_call(L: LuaState, nargs: number, nresults: number): number;
+	lua_callk(L: LuaState, nargs: number, nresults: number, ctx: number, k: number): number;
     lua_close(L: LuaState): void;
     lua_copy(L: LuaState, fromIndex: number, toIndex: number): void;
     // TODO returns int in some lua versions void in others
