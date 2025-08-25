@@ -8,6 +8,7 @@ const luaBindings: Record<string, luaBindingFactoryFunc> = {
         return {
             lua_close: luaGlue.cwrap("lua_close", null, ["number"]),
             lua_gettable: luaGlue.cwrap("lua_gettable", "number", ["number", "number"]),
+            lua_gettop: luaGlue.cwrap("lua_gettop", "number", ["number"]),
             lua_isstring: luaGlue.cwrap("lua_isstring", "number", ["number", "number"]),
             // #define in all versions
             lua_pop: function(L: LuaState, n: number) {
