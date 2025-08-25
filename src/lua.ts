@@ -29,6 +29,7 @@ export interface Lua {
     lua_getglobal(L: LuaState, name: string): number;
     // TODO returns int in some lua versions void in others
     lua_gettable(L: LuaState, index: number): number;
+	lua_gettop(L: LuaState): number;
     lua_insert(L: LuaState, index: number): void;
     lua_isstring(L: LuaState, index: number): number;
     lua_pcall(L: LuaState, nargs: number, nresults: number, msgh: number): number;

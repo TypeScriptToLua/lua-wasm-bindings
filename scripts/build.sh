@@ -32,6 +32,7 @@ if [[ "$1" == "lua-5.0.3" ]]; then
         '_luaL_loadbuffer', \
         '_lua_close', \
         '_lua_gettable', \
+        '_lua_gettop', \
         '_lua_insert', \
         '_lua_isstring', \
         '_lua_open', \
@@ -71,6 +72,7 @@ elif [[ "$1" == "lua-5.1.5" ]]; then
         '_lua_close', \
         '_lua_getfield', \
         '_lua_gettable', \
+		'_lua_gettop', \
         '_lua_insert', \
         '_lua_isstring', \
         '_lua_pcall', \
@@ -110,6 +112,7 @@ elif [[ "$1" == "lua-5.2.4" ]]; then
         '_lua_getfield', \
         '_lua_getglobal', \
         '_lua_gettable', \
+		'_lua_gettop', \
         '_lua_insert', \
         '_lua_isstring', \
         '_lua_pcallk', \
@@ -150,6 +153,7 @@ else
         '_lua_getfield', \
         '_lua_getglobal', \
         '_lua_gettable', \
+		'_lua_gettop', \
         '_lua_isstring', \
         '_lua_pcallk', \
         '_lua_pushstring', \
