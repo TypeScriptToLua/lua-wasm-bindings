@@ -4,5 +4,5 @@
 `dirname "$0"`/build.sh lua-5.1.5
 `dirname "$0"`/build.sh lua-5.2.4
 `dirname "$0"`/build.sh lua-5.3.6
-`dirname "$0"`/build.sh lua-5.4.2
+`dirname "$0"`/build.sh lua-5.4.7
 `dirname "$0"`/build.sh lua-5.5.0
