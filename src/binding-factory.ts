@@ -258,9 +258,18 @@ const luaLibBindings: Record<string, luaLibBindingFactoryFunc> = {
             }
         }
     },
-    ">=5.1.0": function(luaGlue: LuaEmscriptenModule) {
+    ">=5.1.0 <5.5.0": function(luaGlue: LuaEmscriptenModule) {
         return {
             luaL_openlibs: luaGlue.cwrap("luaL_openlibs", null, ["number"]),
+        }
+    },
+    ">=5.5.0": function(luaGlue: LuaEmscriptenModule) {
+        // In Lua 5.5, luaL_openlibs is a macro: #define luaL_openlibs(L) luaL_openselectedlibs(L, ~0, 0)
+        const openselectedlibs = luaGlue.cwrap("luaL_openselectedlibs", null, ["number", "number", "number"]);
+        return {
+            luaL_openlibs: function(L: LuaState) {
+                openselectedlibs(L, ~0, 0);
+            }
         }
     },
 }

@@ -149,7 +149,7 @@ elif [[ "$1" == "lua-5.5.0" ]]; then
         -s WASM_ASYNC_COMPILATION=0 \
         -s EXPORTED_FUNCTIONS="[
         '_luaL_newstate', \
-        '_luaL_openlibs', \
+        '_luaL_openselectedlibs', \
         '_luaL_loadstring', \
         '_luaL_makeseed', \
         '_lua_callk', \
