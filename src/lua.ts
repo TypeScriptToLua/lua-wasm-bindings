@@ -66,5 +66,6 @@ export interface LauxLib {
     luaL_dostring(L: LuaState, s: string): number;
     luaL_loadbuffer(L: LuaState, s: string, slen: number, name: string): typeof LUA_OK | typeof LUA_ERRSYNTAX | typeof LUA_ERRMEM
     luaL_loadstring(L: LuaState, s: string): typeof LUA_OK | typeof LUA_ERRSYNTAX | typeof LUA_ERRMEM;
+    luaL_makeseed(): number;
     luaL_newstate(): LuaState;
 }

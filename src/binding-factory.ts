@@ -201,6 +201,18 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
             }
         }
     },
+    "<5.5.0": function(_luaGlue: LuaEmscriptenModule, _lua: Lua) {
+        return {
+            luaL_makeseed: function() {
+                throw "luaL_makeseed not supported before Lua 5.5";
+            }
+        }
+    },
+    ">=5.5.0": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+        return {
+            luaL_makeseed: luaGlue.cwrap("luaL_makeseed", "number", []),
+        }
+    },
 }
 
 /** @internal */
