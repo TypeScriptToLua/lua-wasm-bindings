@@ -201,6 +201,18 @@ const lauxBindings: Record<string, lauxBindingFactoryFunc> = {
             }
         }
     },
+    "<5.5.0": function(_luaGlue: LuaEmscriptenModule, _lua: Lua) {
+        return {
+            luaL_makeseed: function() {
+                throw "luaL_makeseed not supported before Lua 5.5";
+            }
+        }
+    },
+    ">=5.5.0": function(luaGlue: LuaEmscriptenModule, _lua: Lua) {
+        return {
+            luaL_makeseed: luaGlue.cwrap("luaL_makeseed", "number", []),
+        }
+    },
 }
 
 /** @internal */
@@ -246,9 +258,18 @@ const luaLibBindings: Record<string, luaLibBindingFactoryFunc> = {
             }
         }
     },
-    ">=5.1.0": function(luaGlue: LuaEmscriptenModule) {
+    ">=5.1.0 <5.5.0": function(luaGlue: LuaEmscriptenModule) {
         return {
             luaL_openlibs: luaGlue.cwrap("luaL_openlibs", null, ["number"]),
+        }
+    },
+    ">=5.5.0": function(luaGlue: LuaEmscriptenModule) {
+        // In Lua 5.5, luaL_openlibs is a macro: #define luaL_openlibs(L) luaL_openselectedlibs(L, ~0, 0)
+        const openselectedlibs = luaGlue.cwrap("luaL_openselectedlibs", null, ["number", "number", "number"]);
+        return {
+            luaL_openlibs: function(L: LuaState) {
+                openselectedlibs(L, ~0, 0);
+            }
         }
     },
 }

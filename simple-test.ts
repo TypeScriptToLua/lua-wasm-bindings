@@ -5,6 +5,7 @@ import * as Lua51 from "./dist/lua.51";
 import * as Lua52 from "./dist/lua.52";
 import * as Lua53 from "./dist/lua.53";
 import * as Lua54 from "./dist/lua.54";
+import * as Lua55 from "./dist/lua.55";
 
 function simpleTest(luaBundle: {lua: Lua, lauxlib: LauxLib, lualib: LuaLib}) {
     const state = luaBundle.lauxlib.luaL_newstate();
@@ -16,3 +17,4 @@ simpleTest(Lua51);
 simpleTest(Lua52);
 simpleTest(Lua53);
 simpleTest(Lua54);
+simpleTest(Lua55);
